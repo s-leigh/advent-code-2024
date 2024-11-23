@@ -1,5 +1,4 @@
-#!/bin/zsh
-set -eu
+#!/bin/bash
 
 dayArg=$1
 if [[ dayArg -lt 10 ]]; then
@@ -13,34 +12,43 @@ testDir=src/test/kotlin/adventcode/day"${dayNumber}"
 mkdir $mainDir
 mkdir $testDir
 
-touch src/test/resources/day"${dayNumber}"input.txt
+inputFilename=day-"${dayNumber}"-input.txt
+touch src/test/resources/"$inputFilename"
 
 mainFile="$mainDir/day${dayNumber}.kt"
 testFile="$testDir/Day${dayNumber}Test.kt"
 
-echo "package adventcode.day${dayNumber}\n" > $mainFile
+echo "package adventcode.day${dayNumber}
+
+fun day${dayNumber}Part01(input: String): Int {
+
+}" > $mainFile
 echo "package adventcode.day${dayNumber}
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 class Day${dayNumber}Test: StringSpec ({
-    val input = this::class.java.classLoader.getResource(\"./day${dayNumber}input.txt\")!!.readText()
-    val sampleInput = \"\"\"\"\"\"\"
+    val input = this::class.java.classLoader.getResource(\"./$inputFilename\")!!.readText()
+    val sampleInput1 = \"\"\"\"\"\"\"
 
-    \"Day ${dayNumber} Part 1 sample input\" {
-
+    \"Day ${dayNumber} Part 1 sample input 1\" {
+        val expected = -1
+        day${dayNumber}Part01(sampleInput1) shouldBe expected
     }
 
     \"Day ${dayNumber} Part 1\" {
-
+        val expected = -1
+        day${dayNumber}Part01(input) shouldBe expected
     }
 
-    \"Day ${dayNumber} Part 2 sample input\" {
-
-    }
-
-    \"Day ${dayNumber} Part 2\" {
-
-    }
-})\n" > $testFile
+//    \"Day ${dayNumber} Part 2 sample input 1\" {
+//        val expected = -1
+//        day${dayNumber}Part02(sampleInput1) shouldBe expected
+//    }
+//
+//    \"Day ${dayNumber} Part 2\" {
+//        val expected = -1
+//        day${dayNumber}Part02(input) shouldBe expected
+//    }
+})" > $testFile
