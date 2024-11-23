@@ -20,7 +20,7 @@ testFile="$testDir/Day${dayNumber}Test.kt"
 
 echo "package adventcode.day${dayNumber}
 
-fun day${dayNumber}Part01(input: String): Int {
+fun day${dayNumber}Part1(input: String): Int {
 
 }" > $mainFile
 echo "package adventcode.day${dayNumber}
@@ -34,21 +34,21 @@ class Day${dayNumber}Test: StringSpec ({
 
     \"Day ${dayNumber} Part 1 sample input 1\" {
         val expected = -1
-        day${dayNumber}Part01(sampleInput1) shouldBe expected
+        day${dayNumber}Part1(sampleInput1) shouldBe expected
     }
 
     \"Day ${dayNumber} Part 1\" {
         val expected = -1
-        day${dayNumber}Part01(input) shouldBe expected
+        day${dayNumber}Part1(input) shouldBe expected
     }
 
 //    \"Day ${dayNumber} Part 2 sample input 1\" {
 //        val expected = -1
-//        day${dayNumber}Part02(sampleInput1) shouldBe expected
+//        day${dayNumber}Part2(sampleInput1) shouldBe expected
 //    }
 //
 //    \"Day ${dayNumber} Part 2\" {
 //        val expected = -1
-//        day${dayNumber}Part02(input) shouldBe expected
+//        day${dayNumber}Part2(input) shouldBe expected
 //    }
 })" > $testFile
