@@ -1,3 +1,3 @@
 package adventcode
 
-fun String.lines() = this.split('\n').filterNot { it == "" }
+fun String.asLines() = this.split('\n').filterNot { it == "" }
