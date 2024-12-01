@@ -3,24 +3,27 @@ package adventcode.day01
 import kotlin.math.abs
 import adventcode.asLines
 
-
-
 fun day01Part1(input: String): Int {
-    val lines = input.asLines()
-    val values = lines.map{it.split("\\s\\s\\s".toRegex()).map(String::toInt)}
-    val (firstVals, secondVals) = listOf(values.map{it[0]}, values.map{it[1]})
+    val (firstVals, secondVals) = firstAndSecondValues(input)
     val differences = firstVals.sorted().zip(secondVals.sorted()) {a, b -> abs(a - b)}
     return differences.sum()
 }
 
 fun day01Part2(input: String): Int {
-    val lines = input.asLines()
-    val values = lines.map{it.split("\\s\\s\\s".toRegex()).map(String::toInt)}
-    val (firstVals, secondVals) = listOf(values.map{it[0]}, values.map{it[1]})
-    val secondValFrequency: MutableMap<Int, Int> = secondVals.fold(mutableMapOf<Int, Int>()) { acc, curr ->
+    val (firstVals, secondVals) = firstAndSecondValues(input)
+    val secondValFrequency: Map<Int, Int> = secondVals.fold(mutableMapOf<Int, Int>()) { acc, curr ->
             if (acc.containsKey(curr)) acc[curr] = acc[curr]!! + 1 else acc[curr] = 1
-            return@fold acc
+            acc
     }
     val similarityScores: List<Int> =  firstVals.map{fv -> fv * (secondValFrequency[fv] ?: 0)}
     return similarityScores.sum()
 }
+
+private fun firstAndSecondValues(input: String): Pair<List<Int>, List<Int>> =
+    input.asLines()
+        .map{it.split(Regex("\\s\\s\\s")).map(String::toInt)}
+        .fold(Pair<MutableList<Int>, MutableList<Int>>(mutableListOf<Int>(), mutableListOf<Int>())) { acc, curr ->
+            acc.first.add(curr[0])
+            acc.second.add(curr[1])
+            acc
+        }
