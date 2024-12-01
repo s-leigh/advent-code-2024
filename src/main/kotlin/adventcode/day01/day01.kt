@@ -11,10 +11,7 @@ fun day01Part1(input: String): Int {
 
 fun day01Part2(input: String): Int {
     val (firstVals, secondVals) = firstAndSecondValues(input)
-    val secondValFrequency: Map<Int, Int> = secondVals.fold(mutableMapOf<Int, Int>()) { acc, curr ->
-            if (acc.containsKey(curr)) acc[curr] = acc[curr]!! + 1 else acc[curr] = 1
-            acc
-    }
+    val secondValFrequency = secondVals.groupingBy{ it }.eachCount()
     val similarityScores: List<Int> =  firstVals.map{fv -> fv * (secondValFrequency[fv] ?: 0)}
     return similarityScores.sum()
 }
