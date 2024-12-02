@@ -30,7 +30,7 @@ import io.kotest.matchers.shouldBe
 
 class Day${dayNumber}Test: StringSpec ({
     val input = this::class.java.classLoader.getResource(\"./$inputFilename\")!!.readText()
-    val sampleInput1 = \"\"\"\"\"\"\"
+    val sampleInput1 = \"\"\"\"\"\"
 
     \"Day ${dayNumber} Part 1 sample input 1\" {
         val expected = -1
