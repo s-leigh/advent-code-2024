@@ -15,5 +15,4 @@ fun Int.isPositive() = this > 0
 
 fun Pair<Int, Int>.difference() = this.second - this.first
 
-fun Sequence<Int>.product() = this.reduce { acc, curr -> acc * curr }
-fun Sequence<BigInteger>.product() = this.reduce { acc, curr -> acc * curr }
+fun Pair<BigInteger, BigInteger>.product() = this.first * this.second
