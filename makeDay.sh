@@ -7,10 +7,10 @@ else
   dayNumber=$dayArg;
 fi
 
-mainDir=src/main/kotlin/adventcode/day"${dayNumber}"
-testDir=src/test/kotlin/adventcode/day"${dayNumber}"
-mkdir $mainDir
-mkdir $testDir
+mainDir=src/main/kotlin/adventcode
+testDir=src/test/kotlin/adventcode
+#mkdir $mainDir
+#mkdir $testDir
 
 inputFilename=day-"${dayNumber}"-input.txt
 touch src/test/resources/"$inputFilename"
@@ -18,12 +18,12 @@ touch src/test/resources/"$inputFilename"
 mainFile="$mainDir/day${dayNumber}.kt"
 testFile="$testDir/Day${dayNumber}Test.kt"
 
-echo "package adventcode.day${dayNumber}
+echo "package adventcode
 
 fun day${dayNumber}Part1(input: String): Int {
 
 }" > $mainFile
-echo "package adventcode.day${dayNumber}
+echo "package adventcode
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe

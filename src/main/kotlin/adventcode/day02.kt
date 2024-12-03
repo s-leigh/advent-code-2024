@@ -1,9 +1,5 @@
-package adventcode.day02
+package adventcode
 
-import adventcode.asIntsSplitBy
-import adventcode.difference
-import adventcode.isNegative
-import adventcode.isPositive
 import kotlin.math.abs
 
 fun day02Part1(input: String): Int {

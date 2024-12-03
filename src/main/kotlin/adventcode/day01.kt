@@ -1,7 +1,6 @@
-package adventcode.day01
+package adventcode
 
 import kotlin.math.abs
-import adventcode.asLines
 
 fun day01Part1(input: String): Int {
     val (firstVals, secondVals) = firstAndSecondValues(input)
