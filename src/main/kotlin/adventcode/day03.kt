@@ -1,7 +1,6 @@
-package adventcode.day03
+package adventcode
 
 import java.math.BigInteger
-import adventcode.product
 
 fun day03Part1(input: String): BigInteger {
     return numberPairs(input).sumOf { it.product() }

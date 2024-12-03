@@ -1,10 +1,10 @@
-package adventcode.day01
+package adventcode
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 class Day01Test: StringSpec ({
-    val input = this::class.java.classLoader.getResource("./day-01-input.txt")!!.readText()
+    val input = this::class.java.classLoader.getResource("day-01-input.txt")!!.readText()
     val sampleInput1 = """3   4
 4   3
 2   5

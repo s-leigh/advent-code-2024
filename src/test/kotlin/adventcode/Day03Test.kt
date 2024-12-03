@@ -1,10 +1,10 @@
-package adventcode.day03
+package adventcode
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 class Day03Test : StringSpec({
-    val input = this::class.java.classLoader.getResource("./day-03-input.txt")!!.readText()
+    val input = this::class.java.classLoader.getResource("day-03-input.txt")!!.readText()
     val sampleInput1 = """xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))"""
     val sampleInput2 = """xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"""
     val sampleInput3 = """xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+don't()mul(32,64](mul(11,8)undo()?mul(8,5))"""
