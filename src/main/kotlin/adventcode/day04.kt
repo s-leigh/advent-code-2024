@@ -25,7 +25,7 @@ fun day04Part1(input: String): Int {
 fun day04Part2(input: String): Int {
     val offset = input.asLines()[0].length - 1
     return Regex(
-        """(?=(M.M.{$offset}A.{$offset}S.S))|(?=(M.S.{$offset}A.{$offset}M.S))|(?=(S.M.{$offset}A.{$offset}S.M))|(?=(S.S.{$offset}A.{$offset}M.M))""",
+        """(?=([MS]).([MS]).{$offset}A.{$offset}(?!\2)([MS]).(?!\1)([MS]))""", // subroutine and backreference nonsense
         RegexOption.DOT_MATCHES_ALL
     ).findAll(input).count()
 }

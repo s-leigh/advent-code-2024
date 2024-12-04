@@ -36,4 +36,3 @@ MXMXAXMASX"""
         day04Part2(input) shouldBe expected
     }
 })
-// (?=(M.M.{9}A.{9}S.S))|(?=(M.S.{9}A.{9}M.S))|(?=(S.M.{9}A.{9}S.M))|(?=(S.S.{9}A.{9}M.M))
