@@ -1,0 +1,38 @@
+package adventcode
+
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+
+class Day04Test: StringSpec ({
+    val input = this::class.java.classLoader.getResource("./day-04-input.txt")!!.readText()
+    val sampleInput1 = """MMMSXXMASM
+MSAMXMSMSA
+AMXSXMAAMM
+MSAMASMSMX
+XMASAMXAMM
+XXAMMXXAMA
+SMSMSASXSS
+SAXAMASAAA
+MAMMMXMMMM
+MXMXAXMASX"""
+
+    "Day 04 Part 1 sample input 1" {
+        val expected = 18
+        day04Part1(sampleInput1) shouldBe expected
+    }
+
+    "Day 04 Part 1" {
+        val expected = 2578
+        day04Part1(input) shouldBe expected
+    }
+
+//    "Day 04 Part 2 sample input 1" {
+//        val expected = -1
+//        day04Part2(sampleInput1) shouldBe expected
+//    }
+//
+//    "Day 04 Part 2" {
+//        val expected = -1
+//        day04Part2(input) shouldBe expected
+//    }
+})
