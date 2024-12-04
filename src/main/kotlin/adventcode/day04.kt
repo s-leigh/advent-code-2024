@@ -20,5 +20,30 @@ fun day04Part1(input: String): Int {
     }
     val matches = allLines.map { line -> Regex("""(?=(XMAS))|(?=(SAMX))""").findAll(line) }
     return matches.sumOf { it.toList().size }
-
 }
+
+fun day04Part2(input: String): Int {
+    val offset = input.asLines()[0].length - 1
+    return Regex(
+        """(?=(M.M.{$offset}A.{$offset}S.S))|(?=(M.S.{$offset}A.{$offset}M.S))|(?=(S.M.{$offset}A.{$offset}S.M))|(?=(S.S.{$offset}A.{$offset}M.M))""",
+        RegexOption.DOT_MATCHES_ALL
+    ).findAll(input).count()
+}
+
+/*
+M M
+ A
+S S
+
+M S
+ A
+M S
+
+S M
+ A
+S M
+
+S S
+ A
+M M
+ */
