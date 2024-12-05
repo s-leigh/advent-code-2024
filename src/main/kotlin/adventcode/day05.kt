@@ -1,23 +1,26 @@
 package adventcode
 
+private typealias Rule = Pair<Int, Int>
+private typealias Page = List<Int>
+
 fun day05Part1(input: String): Int {
-    val (rules, pages) = input.asLines().partition { e -> e.contains("|") }
-    val parsedRules = rules.map { it.split("|").map(String::toInt) }.map { Pair(it[0], it[1]) }
-    val mustComeBefore: MutableMap<Int, MutableList<Int>> = mutableMapOf()
-    val mustComeAfter: MutableMap<Int, MutableList<Int>> = mutableMapOf()
-    parsedRules.forEach { (b, a) ->
-        if (mustComeBefore.containsKey(b)) mustComeBefore[b]!!.add(a) else mustComeBefore[b] = mutableListOf(a)
-        if (mustComeAfter.containsKey(a)) mustComeAfter[a]!!.add(b) else mustComeAfter[a] = mutableListOf(b)
-    }
-    val parsedPages = pages.map { it.split(",").toInts() }
-    val inOrder = parsedPages.filter { isInOrder(it, mustComeAfter) }
-    return inOrder.sumOf { it[it.size / 2] }
+    val (rules, pages) = parsedInput(input)
+    val inOrder = pages.filter { it.isInOrder(rules) }
+    return inOrder.sumOf { it.middleValue() }
 }
 
-private tailrec fun isInOrder(list: List<Int>, mustComeAfterRules: Map<Int, List<Int>>): Boolean {
-    if (list.isEmpty()) return true
-    val (head, tail) = list.headAndTail()
-    if (!mustComeAfterRules.containsKey(head)) return isInOrder(tail, mustComeAfterRules)
-    if (tail.any { mustComeAfterRules[head]!!.contains(it) }) return false
-    return isInOrder(tail, mustComeAfterRules)
+fun day05Part2(input: String): Int {
+    val (rules, pages) = parsedInput(input)
+    val outOfOrder = pages.filterNot { it.isInOrder(rules) }
+    val ordered = outOfOrder.map { it.sortedWith { a, b -> if (rules.contains(Pair(a, b))) -1 else 1 } }
+    return ordered.sumOf { it.middleValue() }
 }
+
+private fun parsedInput(input: String): Pair<List<Rule>, List<Page>> {
+    val (rules, pages) = input.asLines().partition { e -> e.contains("|") }
+    val parsedRules = rules.map { it.split("|").map(String::toInt) }.map { Pair(it[0], it[1]) }
+    val parsedPages = pages.map { it.split(",").toInts() }
+    return Pair(parsedRules, parsedPages)
+}
+
+private fun List<Int>.isInOrder(rules: List<Pair<Int, Int>>) = this.zipWithNext().all { rules.contains(it) }

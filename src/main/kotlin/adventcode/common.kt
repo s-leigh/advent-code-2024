@@ -13,7 +13,9 @@ infix fun String.asIntsSplitBy(s: String): List<List<Int>> = (this asLinesSplitB
 fun List<String>.columns() = this.indices.map { colI -> this.map { row -> row[colI] } }
 infix fun List<String>.splitBy(s: String) = this.map { it.split(s) }
 fun List<String>.toInts() = this.map { it.toInt() }
-fun <T>List<T>.headAndTail() = Pair(this[0], this.drop(1))
+fun <T> List<T>.headAndTail() = Pair(this[0], this.drop(1))
+fun <T> List<T>.middleValue() =
+    if (this.size % 2 == 0) throw NotImplementedError("Can't find middle value of even-numbered array") else this[this.size / 2]
 
 @JvmName("toInts2D")
 fun List<List<String>>.toInts() = this.map { it.toInts() }
