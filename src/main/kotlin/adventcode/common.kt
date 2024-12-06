@@ -36,11 +36,29 @@ fun diagonalFrom(startRow: Int, startCol: Int, rowStep: Int, matrix: List<List<C
         else null
     }.map { (row, col) -> matrix[row][col] }.toList()
 
-enum class CardinalDirection {
-    NORTH,
-    SOUTH,
-    EAST,
-    WEST
+data class Vector(val coOrdinates: CoOrdinates, val direction: CardinalDirection)
+
+interface Directional {
+    val isHorizontal: Boolean
+    val isVertical: Boolean
+}
+enum class CardinalDirection: Directional {
+    NORTH{
+        override val isHorizontal = false
+        override val isVertical = true
+    },
+    SOUTH{
+        override val isHorizontal = false
+        override val isVertical = true
+    },
+    EAST {
+        override val isHorizontal = true
+        override val isVertical = false
+    },
+    WEST{
+        override val isHorizontal = true
+        override val isVertical = false
+    },
 }
 
 data class CoOrdinates(val x: Int, val y: Int)
