@@ -44,3 +44,11 @@ enum class CardinalDirection {
 }
 
 data class CoOrdinates(val x: Int, val y: Int)
+
+/* Watch out - this only goes in one direction */
+fun <T> transpose(rows: List<List<T>>): List<List<T>> {
+    val maxColumns = rows.maxOfOrNull { it.size } ?: 0
+    return (0 until maxColumns).map { colIndex ->
+        rows.mapNotNull { row -> row.getOrNull(colIndex) }
+    }
+}
