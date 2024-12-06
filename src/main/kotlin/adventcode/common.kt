@@ -4,14 +4,15 @@ import java.math.BigInteger
 
 private const val NEWLINE_CHAR = '\n'
 
-fun String.asLines(removeEmpty: Boolean = true) =
-    this.split(NEWLINE_CHAR).run { if (removeEmpty) this.filterNot { it == "" } else this }
+fun String.asLines() = this.split(NEWLINE_CHAR).filterNot { it == "" }
 
 infix fun String.asLinesSplitBy(s: String): List<List<String>> = this.asLines() splitBy s
 infix fun String.asIntsSplitBy(s: String): List<List<Int>> = (this asLinesSplitBy s).toInts()
 
+fun String.asMatrix() = this.asLines().map{it.split("").filterNot{it == ""}}
+
 fun List<String>.columns() = this.indices.map { colI -> this.map { row -> row[colI] } }
-infix fun List<String>.splitBy(s: String) = this.map { it.split(s) }
+infix fun List<String>.splitBy(s: String) = this.map { it.split(s).filterNot{it == ""} }
 fun List<String>.toInts() = this.map { it.toInt() }
 fun <T> List<T>.headAndTail() = Pair(this[0], this.drop(1))
 fun <T> List<T>.middleValue() =
@@ -34,3 +35,12 @@ fun diagonalFrom(startRow: Int, startCol: Int, rowStep: Int, matrix: List<List<C
             nextRow to nextCol
         else null
     }.map { (row, col) -> matrix[row][col] }.toList()
+
+enum class CardinalDirection {
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST
+}
+
+data class CoOrdinates(val x: Int, val y: Int)
