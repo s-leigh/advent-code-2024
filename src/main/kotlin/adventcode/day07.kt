@@ -39,12 +39,10 @@ private fun isSuccessful(eq: Equation, ops: Set<Operation>): Boolean {
     return ops.any { op ->
         if (op.name == OperationName.MUL && eq.result % eq.operands.last() != 0L) false
         else if (op.name == OperationName.CONCAT && !eq.result.endsWith(eq.operands.last())) false
-        else isSuccessful(
-            Equation(
-                op.fn.invoke(eq.result, eq.operands.last()),
-                eq.operands.dropLast(1)
-            ), ops
-        )
+        else {
+            val next = op.fn(eq.result, eq.operands.last())
+            isSuccessful(Equation(next, eq.operands.dropLast(1)), ops)
+        }
     }
 }
 

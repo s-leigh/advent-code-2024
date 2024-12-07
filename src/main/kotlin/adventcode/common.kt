@@ -1,8 +1,5 @@
 package adventcode
 
-import java.math.BigInteger
-import kotlin.collections.filterNot
-
 private const val NEWLINE_CHAR = '\n'
 
 fun String.asLines() = this.split(NEWLINE_CHAR).filterNot { it == "" }
@@ -10,12 +7,12 @@ fun String.asLines() = this.split(NEWLINE_CHAR).filterNot { it == "" }
 infix fun String.asLinesSplitBy(s: String): List<List<String>> = (this.asLines() splitBy s)
 infix fun String.asIntsSplitBy(s: String): List<List<Int>> = (this asLinesSplitBy s).toInts()
 
-fun String.asMatrix() = this.asLines().map{it.split("").filterNot{it == ""}}
+fun String.asMatrix() = this.asLines().map { it.split("").filterNot { it == "" } }
 
 fun List<String>.columns() = this.indices.map { colI -> this.map { row -> row[colI] } }
-infix fun List<String>.splitBy(s: String) = this.map { it.split(s).filterNot{it == ""} }
+infix fun List<String>.splitBy(s: String) = this.map { it.split(s).filterNot { it == "" } }
 fun List<String>.toInts() = this.map { it.toInt() }
-fun List<String>.filterNotEmpty() = this.filterNot{it == ""}
+fun List<String>.filterNotEmpty() = this.filterNot { it == "" }
 
 fun <T> List<T>.headAndTail() = Pair(this[0], this.drop(1))
 fun <T> List<T>.middleValue() =
@@ -28,7 +25,7 @@ fun Int.isNegative() = this < 0
 fun Int.isPositive() = this > 0
 
 fun Pair<Int, Int>.difference() = this.second - this.first
-fun Pair<BigInteger, BigInteger>.product() = this.first * this.second
+fun Pair<Long, Long>.product() = this.first * this.second
 
 fun diagonalFrom(startRow: Int, startCol: Int, rowStep: Int, matrix: List<List<Char>>): List<Char> =
     generateSequence(startRow to startCol) { (row, col) ->
@@ -45,12 +42,13 @@ interface Directional {
     val isHorizontal: Boolean
     val isVertical: Boolean
 }
-enum class CardinalDirection: Directional {
-    NORTH{
+
+enum class CardinalDirection : Directional {
+    NORTH {
         override val isHorizontal = false
         override val isVertical = true
     },
-    SOUTH{
+    SOUTH {
         override val isHorizontal = false
         override val isVertical = true
     },
@@ -58,7 +56,7 @@ enum class CardinalDirection: Directional {
         override val isHorizontal = true
         override val isVertical = false
     },
-    WEST{
+    WEST {
         override val isHorizontal = true
         override val isVertical = false
     },
