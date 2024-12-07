@@ -25,13 +25,13 @@ class Day07Test: StringSpec ({
         day07Part1(input) shouldBe expected
     }
 
-//    "Day 07 Part 2 sample input 1" {
-//        val expected = -1
-//        day07Part2(sampleInput1) shouldBe expected
-//    }
-//
-//    "Day 07 Part 2" {
-//        val expected = -1
-//        day07Part2(input) shouldBe expected
-//    }
+    "Day 07 Part 2 sample input 1" {
+        val expected = 11387
+        day07Part2(sampleInput1) shouldBe expected
+    }
+
+    "Day 07 Part 2" {
+        val expected = 348360680516005
+        day07Part2(input) shouldBe expected
+    }
 })
