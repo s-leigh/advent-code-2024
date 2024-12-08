@@ -72,7 +72,7 @@ fun <T> transpose(rows: List<List<T>>): List<List<T>> {
     }
 }
 
-fun <T> cartesianProduct(elements: Set<T>, length: Int): List<List<T>> {
+fun <T> cartesianProduct(elements: Set<T>, length: Int = elements.size): List<List<T>> {
     if (length == 0) return listOf(emptyList())
     return elements.flatMap { element ->
         cartesianProduct(elements, length - 1).map { perm ->
