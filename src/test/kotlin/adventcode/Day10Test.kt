@@ -13,6 +13,12 @@ class Day10Test : StringSpec({
 32019012
 01329801
 10456732"""
+    val sampleInput2 = """012345
+123456
+234567
+345678
+4.6789
+56789."""
 
     "Day 10 Part 1 sample input 1" {
         val expected = 36
@@ -24,13 +30,18 @@ class Day10Test : StringSpec({
         day10Part1(input) shouldBe expected
     }
 
-//    "Day 10 Part 2 sample input 1" {
-//        val expected = 81
-//        day10Part2(sampleInput1) shouldBe expected
-//    }
-//
-//    "Day 10 Part 2" {
-//        val expected = -1
-//        day10Part2(input) shouldBe expected
-//    }
+    "Day 10 Part 2 sample input 1" {
+        val expected = 81
+        day10Part2(sampleInput1) shouldBe expected
+    }
+
+    "Day 10 Part 2 sample input 2" {
+        val expected = 227
+        day10Part2(sampleInput2) shouldBe expected
+    }
+
+    "Day 10 Part 2" {
+        val expected = 1062
+        day10Part2(input) shouldBe expected
+    }
 })

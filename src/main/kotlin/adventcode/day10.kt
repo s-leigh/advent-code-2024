@@ -14,6 +14,14 @@ fun day10Part1(input: String): Int {
     return trailHeads.sumOf { trailheadEndpoints(it, map).toSet().size }
 }
 
+fun day10Part2(input: String): Int {
+    val map: TopographicalMap = input.asMatrix()
+        .map { it.map { if (it == ".") -1 else it.toInt() } }
+        .mapIndexed { y, row -> row.mapIndexed { x, elem -> TopographicalElement(elem, CoOrdinates(x, y)) } }
+    val trailHeads = map.findByValue(0)
+    return trailHeads.sumOf { trailheadRating(it, map) }
+}
+
 private fun trailheadEndpoints(
     pos: TopographicalElement,
     map: TopographicalMap,
@@ -24,6 +32,19 @@ private fun trailheadEndpoints(
     val neighbours = pos.getNeighbours(map).filter { it.value == pos.value + 1 }.filterNot { visited.contains(it) }
     if (neighbours.isEmpty()) return emptyList()
     return neighbours.flatMap { trailheadEndpoints(it, map, visited) }
+}
+
+private fun trailheadRating(
+    pos: TopographicalElement,
+    map: TopographicalMap,
+    visited: List<TopographicalElement> = listOf()
+): Int {
+    if (pos.value == 9) return 1
+    val newVisited = visited.toMutableList()
+    newVisited.add(pos)
+    val neighbours = pos.getNeighbours(map).filter { it.value == pos.value + 1 }.filterNot { newVisited.contains(it) }
+    if (neighbours.isEmpty()) return 0
+    return neighbours.sumOf { trailheadRating(it, map, newVisited) }
 }
 
 private fun TopographicalMap.get(coOrdinates: CoOrdinates) = this[coOrdinates.y][coOrdinates.x]
