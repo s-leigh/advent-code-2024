@@ -1,92 +1,57 @@
 package adventcode
 
-import kotlin.math.max
-
 private data class Antenna(val frequency: Char, val coOrdinates: CoOrdinates)
 
 fun day08Part1(input: String): Int {
     val area = input.asMatrix()
     val maxCoords = CoOrdinates(area[0].size - 1, area.size - 1)
-    val antennae = area.flatMapIndexed { y, line ->
-        line.mapIndexedNotNull { x, c ->
-            if (c != ".") Antenna(
-                c.single(),
-                CoOrdinates(x, y)
-            ) else null
-        }
-    }
-    val antennaeByFrequency = antennae.fold(mutableMapOf<Char, MutableList<Antenna>>()) { acc, curr ->
-        if (acc.containsKey(curr.frequency)) acc[curr.frequency]!!.add(curr) else acc[curr.frequency] =
-            mutableListOf(curr)
-        acc
-    }
+    val antennaeByFrequency = antennaeByFrequency(area)
     val allAntinodes = antennaeByFrequency.entries.flatMap { (_, antennae) ->
-        val pairs = cartesianProduct<Antenna>(antennae.toSet(), 2).map { Pair(it[0], it[1]) }.unique()
-        pairs.flatMap { antinodes(Pair(it.first.coOrdinates, it.second.coOrdinates), maxCoords) }
-    }
+        val pairs = cartesianProduct(antennae.toSet(), 2).map { Pair(it[0], it[1]) }.removeTwins()
+        pairs.map { antinode(Pair(it.first.coOrdinates, it.second.coOrdinates), maxCoords) }
+    }.filterNotNull()
     return allAntinodes.toSet().size
 }
 
 fun day08Part2(input: String): Int {
     val area = input.asMatrix()
     val maxCoords = CoOrdinates(area[0].size - 1, area.size - 1)
-    val antennae = area.flatMapIndexed { y, line ->
+    val antennaeByFrequency = antennaeByFrequency(area)
+    val allAntinodes = antennaeByFrequency.entries.flatMap { (_, antennae) ->
+        val pairs = cartesianProduct(antennae.toSet(), 2).map { Pair(it[0], it[1]) }.removeTwins()
+        pairs.flatMap { extendedAntinodes(Pair(it.first.coOrdinates, it.second.coOrdinates), maxCoords) }
+    }
+    val antennaeCoords = antennaeByFrequency.values.flatMap { it.map { it.coOrdinates } }
+    return allAntinodes.plus(antennaeCoords).toSet().size
+}
+
+private fun antennaeByFrequency(matrix: List<List<String>>): Map<Char, List<Antenna>> {
+    val antennae = matrix.flatMapIndexed { y, line ->
         line.mapIndexedNotNull { x, c ->
-            if (c != ".") Antenna(
+            if (Regex("""[a-zA-Z0-9]""").matches(c)) Antenna(
                 c.single(),
                 CoOrdinates(x, y)
             ) else null
         }
     }
-    val antennaeByFrequency = antennae.fold(mutableMapOf<Char, MutableList<Antenna>>()) { acc, curr ->
+    return antennae.fold(mutableMapOf<Char, MutableList<Antenna>>()) { acc, curr ->
         if (acc.containsKey(curr.frequency)) acc[curr.frequency]!!.add(curr) else acc[curr.frequency] =
             mutableListOf(curr)
         acc
     }
-    val allAntinodes = antennaeByFrequency.entries.flatMap { (_, antennae) ->
-        val pairs = cartesianProduct<Antenna>(antennae.toSet(), 2).map { Pair(it[0], it[1]) }.unique()
-        pairs.flatMap { extendedAntinodes(Pair(it.first.coOrdinates, it.second.coOrdinates), maxCoords) }
-    }
-    return allAntinodes.toSet().size
 }
 
-private fun <T> Pair<T, T>.either(predicate: (T)-> Boolean) = predicate(this.first) || predicate(this.second)
-private fun <T> Pair<T, T>.both(predicate: (T)-> Boolean) = predicate(this.first) && predicate(this.second)
-private fun CoOrdinates.inBounds(maxCoords: CoOrdinates) = this.x <= maxCoords.x && this.y <= maxCoords.y && this.x >= 0 && this.y >= 0
-
-private fun extendedAntinodes(coOrdinates: Pair<CoOrdinates, CoOrdinates>, maxCoords: CoOrdinates): List<CoOrdinates> {
-    val  list: MutableList<CoOrdinates> = mutableListOf<CoOrdinates>()
-    var curr1 = coOrdinates.first
-    var curr2 = coOrdinates.second
-    while (curr1.inBounds(maxCoords)) {
-        val antinodes = antinodes(Pair(curr1, curr2), maxCoords)
-        if (antinodes.isEmpty()) break
-        list.addAll(antinodes)
-        curr1 = antinodes[0]
-    }
-    while (curr2.inBounds(maxCoords)) {
-        val antinodes = antinodes(Pair(curr1, curr2), maxCoords)
-        if (antinodes.isEmpty()) break
-        list.addAll(antinodes)
-        curr2 = antinodes[0]
-    }
-    return list
-}
-
-private fun antinodes(coOrdinates: Pair<CoOrdinates, CoOrdinates>, maxCoords: CoOrdinates): List<CoOrdinates> {
+private fun antinode(coOrdinates: Pair<CoOrdinates, CoOrdinates>, maxCoords: CoOrdinates): CoOrdinates? {
     val (a1, a2) = coOrdinates
-    val xDiff = a1.x - a2.x
-    val yDiff = a1.y - a2.y
-    val c1 = CoOrdinates(a1.x + xDiff, a1.y + yDiff)
-    val c2 = CoOrdinates(a2.x - xDiff, a2.y - yDiff)
-    return listOf(c1, c2).filter { it.inBounds(maxCoords) }
+    val newAntinode = CoOrdinates(a2.x + a2.x - a1.x, a2.y + a2.y - a1.y)
+    return if (newAntinode.inBounds(maxCoords)) newAntinode else null
 }
 
-private fun List<Pair<Antenna, Antenna>>.unique(): Set<Pair<Antenna, Antenna>> =
-    this.fold(mutableSetOf<Pair<Antenna, Antenna>>()) { acc, curr ->
-        if (curr.first != curr.second && !acc.contains(curr) && !acc.contains(Pair(curr.second, curr.first))) acc.add(
-            curr
-        )
-        acc
-    }.toSet()
-
+private tailrec fun extendedAntinodes(
+    coOrdinates: Pair<CoOrdinates, CoOrdinates>,
+    maxCoords: CoOrdinates,
+    list: List<CoOrdinates> = listOf()
+): List<CoOrdinates> {
+    val antinode = antinode(coOrdinates, maxCoords) ?: return list
+    return extendedAntinodes(Pair(coOrdinates.second, antinode), maxCoords, list.plus(antinode))
+}

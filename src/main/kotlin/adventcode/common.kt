@@ -18,6 +18,12 @@ fun <T> List<T>.headAndTail() = Pair(this[0], this.drop(1))
 fun <T> List<T>.middleValue() =
     if (this.size % 2 == 0) throw NotImplementedError("Can't find middle value of even-numbered array") else this[this.size / 2]
 
+fun <T> List<Pair<T, T>>.removeTwins(): Set<Pair<T, T>> =
+    this.fold(mutableSetOf()) { acc, curr ->
+        if (curr.first != curr.second) acc.add(curr)
+        acc
+    }
+
 @JvmName("toInts2D")
 fun List<List<String>>.toInts() = this.map { it.toInts() }
 
@@ -26,6 +32,8 @@ fun Int.isPositive() = this > 0
 
 fun Pair<Int, Int>.difference() = this.second - this.first
 fun Pair<Long, Long>.product() = this.first * this.second
+private fun <T> Pair<T, T>.either(predicate: (T) -> Boolean) = predicate(this.first) || predicate(this.second)
+private fun <T> Pair<T, T>.both(predicate: (T) -> Boolean) = predicate(this.first) && predicate(this.second)
 
 fun diagonalFrom(startRow: Int, startCol: Int, rowStep: Int, matrix: List<List<Char>>): List<Char> =
     generateSequence(startRow to startCol) { (row, col) ->
@@ -62,7 +70,12 @@ enum class CardinalDirection : Directional {
     },
 }
 
-data class CoOrdinates(val x: Int, val y: Int)
+data class CoOrdinates(val x: Int, val y: Int) {
+    constructor(xy: Pair<Int, Int>) : this(xy.first, xy.second)
+
+    fun inBounds(maxCoords: CoOrdinates) =
+        this.x <= maxCoords.x && this.y <= maxCoords.y && this.x >= 0 && this.y >= 0
+}
 
 /* Watch out - this only goes in one direction */
 fun <T> transpose(rows: List<List<T>>): List<List<T>> {
