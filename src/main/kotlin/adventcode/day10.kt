@@ -2,14 +2,14 @@ package adventcode
 
 private typealias TopographicalMap = List<List<TopographicalElement>>
 
-private data class TopographicalElement(val value: Int, val coOrdinates: CoOrdinates) {
+private data class TopographicalElement(val value: Int, val coOrdinates: Coordinates) {
     override fun toString(): String = "$value|${coOrdinates.x},${coOrdinates.y}"
 }
 
 fun day10Part1(input: String): Int {
     val map: TopographicalMap = input.asMatrix()
         .toInts()
-        .mapIndexed { y, row -> row.mapIndexed { x, elem -> TopographicalElement(elem, CoOrdinates(x, y)) } }
+        .mapIndexed { y, row -> row.mapIndexed { x, elem -> TopographicalElement(elem, Coordinates(x, y)) } }
     val trailHeads = map.findByValue(0)
     return trailHeads.sumOf { trailheadEndpoints(it, map).toSet().size }
 }
@@ -17,7 +17,7 @@ fun day10Part1(input: String): Int {
 fun day10Part2(input: String): Int {
     val map: TopographicalMap = input.asMatrix()
         .map { it.map { if (it == ".") -1 else it.toInt() } }
-        .mapIndexed { y, row -> row.mapIndexed { x, elem -> TopographicalElement(elem, CoOrdinates(x, y)) } }
+        .mapIndexed { y, row -> row.mapIndexed { x, elem -> TopographicalElement(elem, Coordinates(x, y)) } }
     val trailHeads = map.findByValue(0)
     return trailHeads.sumOf { trailheadRating(it, map) }
 }
@@ -47,16 +47,16 @@ private fun trailheadRating(
     return neighbours.sumOf { trailheadRating(it, map, newVisited) }
 }
 
-private fun TopographicalMap.get(coOrdinates: CoOrdinates) = this[coOrdinates.y][coOrdinates.x]
+private fun TopographicalMap.get(coOrdinates: Coordinates) = this[coOrdinates.y][coOrdinates.x]
 
 private fun TopographicalElement.getNeighbours(map: TopographicalMap) = with(this.coOrdinates) {
     listOf(
-        CoOrdinates(this.x - 1, this.y),
-        CoOrdinates(this.x + 1, this.y),
-        CoOrdinates(this.x, this.y - 1),
-        CoOrdinates(this.x, this.y + 1),
+        Coordinates(this.x - 1, this.y),
+        Coordinates(this.x + 1, this.y),
+        Coordinates(this.x, this.y - 1),
+        Coordinates(this.x, this.y + 1),
     )
-        .filter { it.inBounds(CoOrdinates(map[0].lastIndex, map.lastIndex)) }
+        .filter { it.inBounds(Coordinates(map[0].lastIndex, map.lastIndex)) }
         .map { map.get(it) }
 }
 

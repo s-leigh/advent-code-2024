@@ -1,6 +1,9 @@
 package adventcode
 
-import adventcode.CardinalDirection.*
+import adventcode.CardinalDirection.EAST
+import adventcode.CardinalDirection.NORTH
+import adventcode.CardinalDirection.SOUTH
+import adventcode.CardinalDirection.WEST
 
 fun day06Part1(input: String): Int {
     val rows = (input asLinesSplitBy "")
@@ -23,10 +26,10 @@ fun day06Part2(input: String): Int {
     return rowVariants.count { stuckInLoop(it, startingPosition) }
 }
 
-private fun List<List<String>>.startingIndex(): CoOrdinates =
+private fun List<List<String>>.startingIndex(): Coordinates =
     this.mapIndexed { y, l ->
         if (l.contains("^")) {
-            CoOrdinates(l.mapIndexed { x, c -> if (c == "^") x else null }.filterNotNull().single(), y)
+            Coordinates(l.mapIndexed { x, c -> if (c == "^") x else null }.filterNotNull().single(), y)
         } else null
     }.filterNotNull().single()
 
@@ -65,8 +68,8 @@ private fun nextVector(rows: List<List<String>>, vector: Vector): Vector? {
     val nextSquareI = relevantIndex + delta
     if (nextSquareI < 0 || nextSquareI >= rows.size) return null // gone off map
 
-    val nextPosition = if (vector.direction.isHorizontal) CoOrdinates(nextSquareI, vector.coOrdinates.y)
-    else CoOrdinates(vector.coOrdinates.x, nextSquareI)
+    val nextPosition = if (vector.direction.isHorizontal) Coordinates(nextSquareI, vector.coOrdinates.y)
+    else Coordinates(vector.coOrdinates.x, nextSquareI)
 
     return if (rows[nextPosition.y][nextPosition.x] == "#") Vector(vector.coOrdinates, turnClockwise(vector.direction))
     else Vector(nextPosition, vector.direction)
