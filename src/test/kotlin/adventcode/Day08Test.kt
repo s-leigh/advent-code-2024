@@ -3,7 +3,7 @@ package adventcode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class Day08Test: StringSpec ({
+class Day08Test : StringSpec({
     val input = this::class.java.classLoader.getResource("./day-08-input.txt")!!.readText()
     val sampleInput1 = """............
 ........0...
@@ -49,7 +49,7 @@ class Day08Test: StringSpec ({
     }
 
     "Day 08 Part 2" {
-        val expected = -1
+        val expected = 1126
         day08Part2(input) shouldBe expected
     }
 })
