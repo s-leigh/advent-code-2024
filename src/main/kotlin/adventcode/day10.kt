@@ -56,11 +56,8 @@ private fun TopographicalElement.getNeighbours(map: TopographicalMap) = with(thi
         CoOrdinates(this.x, this.y - 1),
         CoOrdinates(this.x, this.y + 1),
     )
-        .filterNot { it.outOfBounds(map) }
+        .filter { it.inBounds(CoOrdinates(map[0].lastIndex, map.lastIndex)) }
         .map { map.get(it) }
 }
 
 private fun TopographicalMap.findByValue(value: Int) = this.flatMap { it.filter { it.value == value } }
-
-private fun CoOrdinates.outOfBounds(map: TopographicalMap) = this.x < 0 || this.y < 0 ||
-        this.x > map[0].lastIndex || this.y > map.lastIndex
