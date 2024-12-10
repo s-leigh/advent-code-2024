@@ -53,20 +53,6 @@ private fun MutableList<Block>.rearrangeFiles(): List<Block> {
     return this
 }
 
-private fun MutableList<Block>.combineEmpties() {
-    val toBeRemoved = mutableListOf<Int>()
-    for (i in 1 .. this.lastIndex) {
-        val prev = this[i-1]
-        val curr = this[i]
-        if (prev.id != -1 || curr.id != -1) continue
-        this[i-1] = Block(-1, prev.size + curr.size)
-        toBeRemoved.add(i)
-    }
-    println("list: $this")
-    println("to remove: $toBeRemoved")
-    toBeRemoved.reversed().forEach{this.removeAt(it)}
-}
-
 private fun List<Block>.nextEmpty(minSize: Int) = this.mapIndexed{i, b -> if (b.id == -1 && b.size >= minSize) i else null}
     .filterNotNull()
     .firstOrNull()
