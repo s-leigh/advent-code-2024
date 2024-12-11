@@ -8,6 +8,8 @@ internal fun <T> List<T>.headAndTail() = Pair(this[0], this.drop(1))
 internal fun <T> List<T>.middleValue() =
     if (this.size % 2 == 0) throw NotImplementedError("Can't find middle value of even-numbered array") else this[this.size / 2]
 
+internal fun <T> List<T>.sizeOf(predicate: (T) -> Boolean) = this.filter(predicate).size
+
 internal fun <T> List<Pair<T, T>>.removeTwins(): Set<Pair<T, T>> =
     this.fold(mutableSetOf()) { acc, curr ->
         if (curr.first != curr.second) acc.add(curr)
