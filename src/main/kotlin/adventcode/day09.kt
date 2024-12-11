@@ -22,22 +22,20 @@ fun day09Part2(input: String): Long {
         val blockId = if (isFreeSpace) null else i / 2
         Block(blockId, n.toInt())
     }
-    val res = rearrangeFiles(blocks.toMutableList())
-    val cs = res.checkSum()
-    return cs
+    val rearranged = rearrangeFiles(blocks.toMutableList())
+    return rearranged.checkSum()
 }
 
 private fun rearrangeFiles(blocks: MutableList<Block>): List<Block> {
     for (fileI in blocks.lastIndex downTo 0) {
         val file = blocks[fileI]
         if (file.id == null) continue
-        val freeSpaceI = blocks.firstFreeSpace(file.size)
-        if (freeSpaceI != null && freeSpaceI < fileI) {
-            val leftoverSpace = blocks[freeSpaceI].size - file.size
-            blocks[freeSpaceI] = file
-            blocks[fileI] = Block(null, file.size)
-            if (leftoverSpace > 0) blocks.add(freeSpaceI + 1, Block(null, leftoverSpace))
-        }
+        val freeSpaceI = blocks.subList(0, fileI).firstFreeSpace(file.size) ?: continue
+        val leftoverSpace = blocks[freeSpaceI].size - file.size
+        blocks[freeSpaceI] = file
+        blocks[fileI] = Block(null, file.size)
+        if (leftoverSpace > 0) blocks.add(freeSpaceI + 1, Block(null, leftoverSpace))
+
     }
     return blocks
 }
