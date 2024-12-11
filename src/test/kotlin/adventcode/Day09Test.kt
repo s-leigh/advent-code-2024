@@ -56,7 +56,7 @@ class Day09Test : StringSpec({
     }
 
     "Day 09 Part 2" {
-        val expected = -1
+        val expected = 6221662795602
         day09Part2(input) shouldBe expected
     }
 })

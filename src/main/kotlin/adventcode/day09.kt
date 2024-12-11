@@ -22,35 +22,31 @@ fun day09Part2(input: String): Long {
         val blockId = if (isFreeSpace) -1 else i / 2
         Block(blockId, n.toInt())
     }.filter { it.size > 0 }
-//    val blockElements: List<Block> = blocks.flatMap { Block(it.id, 1).repeat(it.size) }
 //    println("start: $blocks")
     val newDisk = blocks.toMutableList().rearrangeFiles()
 //    println("end result: $newDisk")
-    return newDisk.checkSumFiles()
+    return newDisk.checkSum()
 }
 
 private fun MutableList<Block>.rearrangeFiles(): List<Block> {
-    for (i in this.lastIndex downTo 0) {
-        val b = this[i]
+    val new = this.toList().toMutableList()
+    for (i in new.lastIndex downTo 0) {
+        val b = new[i]
         if (b.id < 0) continue
-        val nextEmptyI = this.nextEmpty(b.size)
+        val nextEmptyI = new.nextEmpty(b.size)
         if (nextEmptyI != null && nextEmptyI < i) {
-            this[i] = Block(-1, b.size)
-            val space = this[nextEmptyI]
+            new[i] = Block(-1, b.size)
+            val space = new[nextEmptyI]
             val leftover = space.size - b.size
-            this.removeAt(nextEmptyI)
-            this.add(nextEmptyI, b)
+            new.removeAt(nextEmptyI)
+            new.add(nextEmptyI, b)
             if (leftover > 0) {
-//                if (nextEmptyI + 1 < this.lastIndex && this[nextEmptyI+1].id == -1)
-                this.add(nextEmptyI+1, Block(-1, leftover))
-//                println("leftovers: $this")
+                new.add(nextEmptyI+1, Block(-1, leftover))
             }
-//            this.combineEmpties()
         }
-//        println(this)
     }
 
-    return this
+    return new
 }
 
 private fun List<Block>.nextEmpty(minSize: Int) = this.mapIndexed{i, b -> if (b.id == -1 && b.size >= minSize) i else null}
@@ -70,8 +66,6 @@ private fun MutableList<Block>.rearrangeBlocks(): List<Block> {
     return this.subList(0, numElements)
 }
 
-private fun List<Block>.checkSumFiles(): Long = this.flatMap {
-//    println(Block(it.id, 1).repeat(it.size) )
+private fun List<Block>.checkSum(): Long = this.flatMap {
     Block(if (it.id == -1) 0 else it.id, 1).repeat(it.size)
-}.checkSum()
-private fun List<Block>.checkSum(): Long = this.mapIndexed { i, b -> i * b.id.toLong() }.sum()
+}.mapIndexed { i, b -> i * b.id.toLong() }.sum()
