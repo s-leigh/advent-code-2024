@@ -45,10 +45,10 @@ MMMISSJEEE"""
         day12Part1(input) shouldBe expected
     }
 
-//    "Day 12 Part 2 sample input 1" {
-//        val expected = -1
-//        day12Part2(sampleInput1) shouldBe expected
-//    }
+    "Day 12 Part 2 sample input 1" {
+        val expected = 80
+        day12Part2(sampleInput1) shouldBe expected
+    }
 //
 //    "Day 12 Part 2" {
 //        val expected = -1

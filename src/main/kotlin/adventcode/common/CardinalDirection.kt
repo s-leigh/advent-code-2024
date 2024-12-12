@@ -23,3 +23,10 @@ internal enum class CardinalDirection : Directional {
         override val isVertical = false
     },
 }
+
+internal enum class DiagonalDirection {
+    NORTHEAST,
+    NORTHWEST,
+    SOUTHEAST,
+    SOUTHWEST
+}
