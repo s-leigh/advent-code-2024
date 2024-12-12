@@ -1,45 +1,52 @@
 package adventcode
 
 private data class Plant(val coords: Coordinates, val name: Char)
-private data class Relationship(val plantName: Char, val neighbours: List<Coordinates>)
-
-private typealias Relationships = Map<Coordinates, Relationship>
-private typealias Edges = Pair<Coordinates, Int>
+private typealias Neighbours = Map<Plant, List<Plant>>
 
 fun day12Part1(input: String): Int {
     val matrix = input.asMatrix()
     val maxCoords = Coordinates(matrix[0].lastIndex, matrix.lastIndex)
-    val map = matrix.flatMapIndexed { y, l -> l.mapIndexed { x, c -> Plant(Coordinates(x, y), c.single()) } }
-    println(map)
-    val relationships = map.fold(mutableMapOf<Coordinates, Relationship>()) { acc, plant ->
-        with(plant.coords) {
-            val neighbours = listOf(
-                Coordinates(this.x - 1, this.y), Coordinates(this.x, this.y - 1), Coordinates(this.x + 1, this.y),
-                Coordinates(this.x, this.y + 1)
-            ).filter { it.inBounds(maxCoords) }
-            acc[this] = Relationship(plant.name, neighbours)
-        }
+    val plants = matrix.flatMapIndexed { y, l -> l.mapIndexed { x, c -> Plant(Coordinates(x, y), c.single()) } }
+    val neighbours: Neighbours = plants.fold(mutableMapOf<Plant, List<Plant>>()) { acc, plant ->
+        val neighbours = with(plant) {
+            listOf(
+                Coordinates(coords.x - 1, coords.y),
+                Coordinates(coords.x, coords.y - 1),
+                Coordinates(coords.x + 1, coords.y),
+                Coordinates(coords.x, coords.y + 1)
+            )
+        }.filter { it.inBounds(maxCoords) }.map { Plant(it, matrix[it.y][it.x].single()) }
+        acc[plant] = neighbours
         acc
     }
+    val processedPlants: MutableSet<Plant> = mutableSetOf()
+    val areas = neighbours.keys.mapNotNull {
+        if (!processedPlants.contains(it)) {
+            val area = area(it, neighbours).toSet()
+            processedPlants.addAll(area)
+            area
+        } else null
+    }.toSet()
 
-    val e = relationships.keys.flatMap { edges(it, relationships) }.toSet()
-
-    return -1
+    return areas.fold(0) { acc, curr ->
+        val edges = curr.sumOf { edges(it, neighbours) }
+        acc + (curr.size * edges)
+    }
 }
 
-private fun edges(
-    coords: Coordinates,
-    relationships: Relationships,
-    edges: MutableList<Pair<Coordinates, Int>> = mutableListOf(),
-    nonEdges: MutableList<Coordinates> = mutableListOf()
-): List<Pair<Coordinates, Int>> {
-    val thisR = relationships[coords]!!
-    val neighbours = thisR.neighbours
-    val numForeignNeighbours = neighbours.filterNot{relationships[it]!!.plantName == thisR.plantName}.size
-    if (numForeignNeighbours > 0 || neighbours.size < 4) edges.add(Pair(coords, numForeignNeighbours + 4 - neighbours.size))
-    else nonEdges.add(coords)
+private fun area(
+    plant: Plant, relationships: Neighbours, visited: MutableList<Plant> = mutableListOf()
+): List<Plant> {
+    visited.add(plant)
+    val neighbours = relationships[plant]!!
+    val possibleNext = neighbours.filter { !visited.contains(it) && it.name == plant.name }
+    if (possibleNext.isEmpty()) return visited
+    return possibleNext.flatMap { area(it, relationships, visited) }
+}
 
-    val toBeProcessed = neighbours.filterNot { edges.map{it.first}.contains(it) || nonEdges.contains(it) }
-    if (toBeProcessed.isEmpty()) return edges
-    return toBeProcessed.flatMap { edges(it, relationships, edges, nonEdges) }
+private fun edges(plant: Plant, relationships: Neighbours): Int {
+    val neighbours = relationships[plant]!!
+    val numForeignNeighbours = neighbours.filterNot { it.name == plant.name }.size
+    val edgeOfMapDelta = 4 - neighbours.size
+    return numForeignNeighbours + edgeOfMapDelta
 }
