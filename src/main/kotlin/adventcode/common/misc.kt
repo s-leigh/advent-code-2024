@@ -9,3 +9,5 @@ internal fun Pair<Int, Int>.difference() = this.second - this.first
 internal fun Pair<Long, Long>.product() = this.first * this.second
 internal fun <T> Pair<T, T>.either(predicate: (T) -> Boolean) = predicate(this.first) || predicate(this.second)
 internal fun <T> Pair<T, T>.both(predicate: (T) -> Boolean) = predicate(this.first) && predicate(this.second)
+
+internal tailrec fun greatestCommonDivisor(a: Int, b: Int): Int = if (b == 0) a else greatestCommonDivisor(b, a % b)
