@@ -3,7 +3,7 @@ package adventcode
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class Day13Test: StringSpec ({
+class Day13Test : StringSpec({
     val input = this::class.java.classLoader.getResource("./day-13-input.txt")!!.readText()
     val sampleInput1 = """Button A: X+94, Y+34
 Button B: X+22, Y+67
@@ -31,13 +31,8 @@ Prize: X=18641, Y=10279"""
         day13Part1(input) shouldBe expected
     }
 
-//    "Day 13 Part 2 sample input 1" {
-//        val expected = -1
-//        day13Part2(sampleInput1) shouldBe expected
-//    }
-//
-//    "Day 13 Part 2" {
-//        val expected = -1
-//        day13Part2(input) shouldBe expected
-//    }
+    "Day 13 Part 2" {
+        val expected = 87550094242995
+        day13Part2(input) shouldBe expected
+    }
 })
