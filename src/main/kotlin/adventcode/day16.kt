@@ -38,12 +38,13 @@ private fun dijkstraTime(nodeMap: MutableMap<String, Node>): Int {
     while (queue.isNotEmpty()) {
         val newNode = queue.poll()
         currentDirection = newDirection(prevNode, newNode)
+        val currentDistance = newNode.distance
         newNode.visited = true
         val neighbours = neighbours(newNode)
-            .filter{nodeMap.contains(it.value) && !nodeMap[it.value]!!.visited} // TODO visited doesn't matter
+            .filter{nodeMap.contains(it.value) }//&& !nodeMap[it.value]!!.visited} // TODO visited doesn't matter
         neighbours.forEach { (dir, key) ->
             val currNeighbourDist = nodeMap[key]!!.distance
-            val newNeighbourDist = prevNode.distance + (if (newNode.visited) newNode.distance else 0) + (if (dir != currentDirection) 1000 else 1)
+            val newNeighbourDist = currentDistance + 1//(if (newNode.visited) newNode.distance else 0) //+ (if (dir != currentDirection) 1000 else 1)
             if (newNeighbourDist < currNeighbourDist) {
                 nodeMap[key]!!.distance = newNeighbourDist
                 queue.add(nodeMap[key])
