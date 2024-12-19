@@ -27,13 +27,13 @@ bbrgwb
         day19Part1(input) shouldBe expected
     }
 
-//    "Day 19 Part 2 sample input 1" {
-//        val expected = -1
-//        day19Part2(sampleInput1) shouldBe expected
-//    }
-//
-//    "Day 19 Part 2" {
-//        val expected = -1
-//        day19Part2(input) shouldBe expected
-//    }
+    "Day 19 Part 2 sample input 1" {
+        val expected = 16L
+        day19Part2(sampleInput1) shouldBe expected
+    }
+
+    "Day 19 Part 2" {
+        val expected = 848076019766013L
+        day19Part2(input) shouldBe expected
+    }
 })
