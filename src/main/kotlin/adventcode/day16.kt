@@ -37,29 +37,25 @@ private fun dijkstraTime(nodeMap: MutableMap<String, Node>): Int {
     queue.add(prevNode)
     while (queue.isNotEmpty()) {
         val newNode = queue.poll()
-        currentDirection = newDirection(prevNode, newNode)
+        val newDirection = newDirection(prevNode, newNode)
+//        val haveChangedDirection = currentDirection != newDirection
+        currentDirection = newDirection
         val currentDistance = newNode.distance
         newNode.visited = true
         val neighbours = neighbours(newNode)
-            .filter{nodeMap.contains(it.value) }//&& !nodeMap[it.value]!!.visited} // TODO visited doesn't matter
+            .filter{nodeMap.contains(it.value) }
         neighbours.forEach { (dir, key) ->
             val currNeighbourDist = nodeMap[key]!!.distance
-            val newNeighbourDist = currentDistance + 1//(if (newNode.visited) newNode.distance else 0) //+ (if (dir != currentDirection) 1000 else 1)
+            val wouldChangeDirection = dir != currentDirection
+            val newNeighbourDist = currentDistance + 1 + (if (wouldChangeDirection) 1000 else 0)
             if (newNeighbourDist < currNeighbourDist) {
                 nodeMap[key]!!.distance = newNeighbourDist
                 queue.add(nodeMap[key])
             }
         }
         prevNode = newNode
-////    currentNode = neighbours.values.map{nodeMap[it]!!}.minBy { it.distance }
-//        val nextNode = neighbours.filterNot{nodeMap[it.value]!!.visited}.minBy { nodeMap[it.value]!!.distance }
-//        queue.add(nodeMap[nextNode.value])
-//        currentNode = nodeMap[nextNode.value]!!
-//        currentDirection = nextNode.key
     }
-    return nodeMap.values.single { it.isEnd }.distance
-//    throw Exception("Unreachable end :(")
-//    return nodeMap.values.single{it.isEnd}.distance
+    return nodeMap.values.single { it.isEnd }.distance// + 1000
 }
 
 private fun neighbours(node: Node): Map<CardinalDirection, String> {
